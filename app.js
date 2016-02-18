@@ -1,4 +1,4 @@
-var express = require('express');
+ var express = require('express');
 var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -9,7 +9,7 @@ var connectionString = '';
 if(process.env.DATABASE_URL != undefined) {
     connectionString = process.env.DATABASE_URL + 'ssl';
 } else {
-    connectionString = 'postgres://localhost:5432/node-app';
+    connectionString = 'postgres://localhost:5432/NodeSQLFormUpdate';
 }
 
 app.use(bodyParser.json());
@@ -41,12 +41,15 @@ app.get('/people', function(req, res) {
 app.post('/people', function(req, res) {
     var addPerson = {
         name: req.body.name,
-        address: req.body.address
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        zip_code: req.body.zip_code
     };
-
+// Updated client.query(city, state, zip) & VALUES
     pg.connect(connectionString, function(err, client) {
-        client.query("INSERT INTO people (name, address) VALUES ($1, $2) RETURNING id",
-            [addPerson.name, addPerson.address],
+        client.query("INSERT INTO people (name, address, city, state, zip_code) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+            [addPerson.name, addPerson.address, addPerson.city, addPerson.state, addPerson.zip_code],
             function (err, result) {
                 if(err) {
                     console.log("Error inserting data: ", err);

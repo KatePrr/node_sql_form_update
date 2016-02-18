@@ -37,7 +37,20 @@ function getData() {
         type: 'GET',
         url: '/people',
         success: function(data) {
+
             console.log(data);
+
+
+        //loop over array of objects, display each object properties and values
+
+            $.each(data, function(i, value) {
+                console.log(value);
+               $('.newAddress').append('<div class="person"></div>');
+                var $el = $('.newAddress').children().last();
+                $el.append('<h2>' + value.name + '</h2>');
+                $el.append('<p>' + value.address + '</p>');
+                $el.append('<p>' + value.city + ', ' + value.state + '  ' + value.zip_code + '</p>');
+            })
         }
     });
 }
